@@ -21,6 +21,9 @@ class BookingController {
       
     }
 
+    /* 
+     * First import employees/Users from json file
+    */
     private function getOrCreateUser($name, $email) {
         $stmt = $this->pdo->prepare("SELECT id FROM users WHERE email = ?");
         $stmt->execute([$email]);
@@ -32,7 +35,10 @@ class BookingController {
         }
         return $id;
     }
-
+    
+    /* 
+     * secondly ,create event by extracting event name and event date from json file
+    */
     private function getOrCreateEvent($name, $date) {
         $stmt = $this->pdo->prepare("SELECT id FROM events WHERE name = ? AND event_date = ?");
         $stmt->execute([$name, $date]);
@@ -45,6 +51,9 @@ class BookingController {
         return $id;
     }
 
+    /* 
+     * Lastly create booking by linking employee_id i.e participant_id and event_id in bookings table
+    */
     private function insertBooking($userId, $eventId, $fee) {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM bookings WHERE participation_id = ? AND event_id = ?");
         $stmt->execute([$userId, $eventId]);
